@@ -55,12 +55,14 @@ class App extends Component {
           <Loading />
         ) : (
           <div>
+            <Header title="Yet Another React Weather App" />
+
             {this.state.error ? (
               <p className="error">
                 Oops, seems like something went wrong ... Please try again!
               </p>
             ) : null}
-            <p>App</p>
+
             <Input
               label="Please type a city"
               placeholder="Ex: Singapore"
