@@ -34,20 +34,32 @@ class App extends Component {
 
     try {
       let data = await store.get("weather", { q: value });
-      this.setState(prev => ({ ...prev, data, error: false }));
+      let cities = await store.put("cities", { name: data.name, id: data.id });
+
+      this.setState(prev => ({ ...prev, data, cities, error: false }));
     } catch (err) {
       this.setState(prev => ({ ...prev, error: true }));
+    } finally {
+      this.setState(prev => ({ ...prev, loading: false }));
     }
-
-    this.setState(prev => ({ ...prev, loading: false }));
   };
 
-  componentDidMount() {
-    this.setState(prev => ({ ...prev, loading: false }));
+  async componentDidMount() {
+    const { store } = this.props;
+
+    try {
+      let cities = await store.get("cities");
+
+      this.setState(prev => ({ ...prev, cities, error: false }));
+    } catch (err) {
+      this.setState(prev => ({ ...prev, error: true }));
+    } finally {
+      this.setState(prev => ({ ...prev, loading: false }));
+    }
   }
 
   render() {
-    const { data } = this.state;
+    const { data, cities } = this.state;
 
     return (
       <div className="App">
@@ -62,7 +74,17 @@ class App extends Component {
                 Oops, seems like something went wrong ... Please try again!
               </p>
             ) : null}
-
+            {cities && cities.length ? (
+              <div className="cities">
+                <ul className="cities-list">
+                  {cities.map(city => (
+                    <li key={city.id} className="cities-list-element">
+                      {city.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             <Input
               label="Please type a city"
               placeholder="Ex: Singapore"
