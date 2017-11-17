@@ -11,11 +11,17 @@ class App extends Component {
     error: false
   };
 
-  componentDidMount() {
-    this.setState(prev => ({
-      ...prev,
-      loading: false
-    }));
+  async componentDidMount() {
+    const { store, APPID } = this.props;
+
+    try {
+      let data = await store.get("weather", { q: "Singapore", APPID });
+      this.setState(prev => ({ ...prev, data, error: false }));
+    } catch (err) {
+      this.setState(prev => ({ ...prev, error: true }));
+    }
+
+    this.setState(prev => ({ ...prev, loading: false }));
   }
 
   render() {
