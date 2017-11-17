@@ -24,16 +24,22 @@ class App extends Component {
 
   handleInputKeyDown = e => {
     if (e.keyCode === 13) {
-      this.getWeatherInfo();
+      const { input: { value } } = this.state;
+
+      this.getWeatherInfo({
+        city: value
+      });
     }
   };
 
-  getWeatherInfo = async () => {
+  getWeatherInfo = async ({ city, id }) => {
     const { store } = this.props;
-    const { input: { value } } = this.state;
 
     try {
-      let data = await store.get("weather", { q: value });
+      let data = await store.get(
+        "weather",
+        city ? { q: city } : id ? { id } : {}
+      );
       let cities = await store.put("cities", { name: data.name, id: data.id });
 
       this.setState(prev => ({ ...prev, data, cities, error: false }));
@@ -78,7 +84,11 @@ class App extends Component {
               <div className="cities">
                 <ul className="cities-list">
                   {cities.map(city => (
-                    <li key={city.id} className="cities-list-element">
+                    <li
+                      key={city.id}
+                      className="cities-list-element"
+                      onClick={() => this.getWeatherInfo({ id: city.id })}
+                    >
                       {city.name}
                     </li>
                   ))}
