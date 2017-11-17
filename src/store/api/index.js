@@ -12,7 +12,6 @@ const api = {
     let error;
 
     try {
-      console.log(process.env.REACT_APP_OWN_API_KEY);
       value = await fetch(
         `${config.baseUrl}/${key}?${qs.stringify({
           ...data,
