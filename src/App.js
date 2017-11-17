@@ -1,17 +1,38 @@
 import React, { Component } from "react";
 
 import Header from "./components/Header";
+import Loading from "./components/Loading";
 
 import "./App.css";
 
 class App extends Component {
+  state = {
+    loading: true,
+    error: false
+  };
+
+  componentDidMount() {
+    this.setState(prev => ({
+      ...prev,
+      loading: false
+    }));
+  }
+
   render() {
     return (
       <div className="App">
-        <Header title="Welcome to React" />
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        {this.state.loading ? (
+          <Loading />
+        ) : (
+          <div>
+            {this.state.error ? (
+              <p className="error">
+                Oops, seems like something went wrong ... Please try again!
+              </p>
+            ) : null}
+            <p>App</p>
+          </div>
+        )}
       </div>
     );
   }
