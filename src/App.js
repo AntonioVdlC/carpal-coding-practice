@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 
+import CityList from "./components/CityList";
 import Header from "./components/Header";
 import Input from "./components/Input";
 import Loading from "./components/Loading";
+import WeatherInfo from "./components/WeatherInfo";
+import Whisper from "./components/Whisper";
 
 import "./App.css";
 
@@ -74,27 +77,15 @@ class App extends Component {
         ) : (
           <div>
             <Header title="Yet Another React Weather App" />
-
-            {this.state.error ? (
-              <p className="error">
-                Oops, seems like something went wrong ... Please try again!
-              </p>
-            ) : null}
-            {cities && cities.length ? (
-              <div className="cities">
-                <ul className="cities-list">
-                  {cities.map(city => (
-                    <li
-                      key={city.id}
-                      className="cities-list-element"
-                      onClick={() => this.getWeatherInfo({ id: city.id })}
-                    >
-                      {city.name}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
+            <Whisper
+              display={this.state.error}
+              type="error"
+              text="Oops, seems like something went wrong ... Please try again!"
+            />
+            <CityList
+              cities={this.state.cities}
+              onCityClick={id => () => this.getWeatherInfo({ id })}
+            />
             <Input
               label="Please type a city"
               placeholder="Ex: Singapore"
@@ -102,21 +93,7 @@ class App extends Component {
               onInputChange={this.handleInputChange}
               onInputKeyDowm={this.handleInputKeyDown}
             />
-            {data ? (
-              <div>
-                <p>{data.name}</p>
-                <p>{data.main.temp}</p>
-                <p>{data.weather[0].main}</p>
-                <p>
-                  <img
-                    src={`http://openweathermap.org/img/w/${
-                      data.weather[0].icon
-                    }.png`}
-                  />
-                </p>
-                <p>{new Date(Date.now()).toString()}</p>
-              </div>
-            ) : null}
+            <WeatherInfo data={data} />
           </div>
         )}
       </div>
