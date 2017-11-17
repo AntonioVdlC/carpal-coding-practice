@@ -1,3 +1,4 @@
+import deepEqual from "deep-equal";
 import isObject from "is-obj";
 
 import api from "./api";
@@ -15,7 +16,7 @@ const store = {
     [error, value] = await cache.get(key);
 
     // Something went wrong or cache outdated
-    if (error) {
+    if (error || value == null) {
       // Key is safelisted by API, so let's retrieve data from there!
       if (api.safelist(key)) {
         [error, value] = await api.get(key, data);
@@ -42,21 +43,21 @@ const store = {
   },
   put: async (key, data) => {
     let value, error;
-    let current;
 
-    [error, current] = cache.get(key);
+    [error, value] = cache.get(key);
 
     if (!error) {
-      if (Array.isArray(current)) {
+      if (Array.isArray(value)) {
         // We are storing an array, so let's just push the new data
         // into it.
         // To get fancy and optimize a bit the cache memory, let's
         // make sure we ain't putting no duplicates!
-        current.push(data);
-        value = [...new Set(current)];
-      } else if (isObject(current)) {
+        if (!value.some(v => deepEqual(v, data))) {
+          value.push(data);
+        }
+      } else if (isObject(value)) {
         // We are storing an object, so let's merge it with the new data
-        value = { ...current, data };
+        value = { ...value, data };
       } else {
         // We are storing a primitive data, so let's just replace it? 🤷🏾‍♂️
         // This should be a POST though ... 😅

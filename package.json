@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "deep-equal": "^1.0.1",
     "is-obj": "^1.0.1",
     "query-string": "^5.0.1",
     "react": "^16.1.1",

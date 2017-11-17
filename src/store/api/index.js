@@ -7,7 +7,7 @@ const api = {
   init: key => {
     this.APPID = key;
   },
-  safelist: key => ["weather"].contains(key),
+  safelist: key => ["weather"].includes(key),
   get: async (key, data) => {
     let value;
     let error;
