@@ -6,13 +6,19 @@ const cache = {
     // Initialise cache elements
     if (localStorage.getItem("cities") == null) {
       localStorage.setItem("cities", JSON.stringify([]));
+      localStorage.setItem(
+        "cities-valid-until",
+        new Date(
+          new Date().getTime() + 36500 * 86400000
+        ).toString() /* 100 years */
+      );
     }
   },
   get: key => {
     let value, error;
 
     let validUntil = localStorage.getItem(`${key}-valid-until`);
-    let isValid = validUntil == null || new Date() < new Date(validUntil);
+    let isValid = validUntil && new Date() < new Date(validUntil);
 
     // Flag the value as outdated if cache is not valid
     // but still retrieve the value in case the subsequent
