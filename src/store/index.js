@@ -13,13 +13,29 @@ const store = {
     let value, error;
 
     // Try first to look into the cache!
-    [error, value] = await cache.get(key);
+    //
+    // As we can query the weather either with the name of a city `q`
+    // or an `id` we might end up with duplicated data, and querying
+    // twice for the same information ...
+    // This is far from ideal, and a better strategy would be to merge
+    // that data and cross-checking it with the `cities`.
+    [error, value] = await cache.get(
+      key === "weather" ? `${key}-${data.id || data.q}` : key
+    );
 
     // Something went wrong or cache outdated
     if (error || value == null) {
       // Key is safelisted by API, so let's retrieve data from there!
       if (api.safelist(key)) {
         [error, value] = await api.get(key, data);
+
+        // Save value into cache
+        if (!error) {
+          await cache.set(
+            key === "weather" ? `${key}-${data.id || data.q}` : key,
+            value
+          );
+        }
       } else {
         // The data cannot be retrieved from the API
         // If the data is only outdated, let's just return it and
