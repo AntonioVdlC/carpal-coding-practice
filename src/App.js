@@ -30,10 +30,20 @@ class App extends Component {
     if (e.keyCode === 13) {
       const { input: { value } } = this.state;
 
+      if (!value) return;
+
       this.getWeatherInfo({
         city: value
       });
     }
+  };
+
+  handleInputButtonClick = e => {
+    const { input: { value } } = this.state;
+
+    if (!value) return;
+
+    this.getWeatherInfo({ city: value });
   };
 
   getWeatherInfo = async ({ city, id }) => {
@@ -101,6 +111,7 @@ class App extends Component {
                 value={this.state.input.value}
                 onInputChange={this.handleInputChange}
                 onInputKeyDowm={this.handleInputKeyDown}
+                onButtonClick={this.handleInputButtonClick}
               />
               <WeatherInfo data={data} />
             </Main>
