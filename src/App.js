@@ -85,8 +85,6 @@ class App extends Component {
   }
 
   render() {
-    const { data, cities } = this.state;
-
     return (
       <div className="App">
         {this.state.loading ? (
@@ -113,7 +111,7 @@ class App extends Component {
                 onInputKeyDowm={this.handleInputKeyDown}
                 onButtonClick={this.handleInputButtonClick}
               />
-              <WeatherInfo data={data} />
+              <WeatherInfo data={this.state.data} />
             </Main>
           </div>
         )}

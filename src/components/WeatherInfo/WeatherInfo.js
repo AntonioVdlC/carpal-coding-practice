@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ktoc, ktof } from "../../utils/convert-temperature";
+import { ktoc } from "../../utils/convert-temperature";
 
 import "./WeatherInfo.css";
 
