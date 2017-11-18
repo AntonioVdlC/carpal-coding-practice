@@ -1,12 +1,14 @@
 import React from "react";
 
+import { ktoc, ktof } from "../../utils/convert-temperature";
+
 import "./WeatherInfo.css";
 
 const WeatherInfo = ({ data }) =>
   data ? (
     <div className="weather">
       <p className="weather-city">{data.name}</p>
-      <p className="weather-temperature">{data.main.temp}</p>
+      <p className="weather-temperature">{ktoc(data.main.temp)} °C</p>
       <p className="weather-main">{data.weather[0].main}</p>
       <img
         className="weather-icon"
