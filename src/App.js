@@ -4,6 +4,7 @@ import CityList from "./components/CityList";
 import Header from "./components/Header";
 import Input from "./components/Input";
 import Loading from "./components/Loading";
+import Main from "./components/Main";
 import WeatherInfo from "./components/WeatherInfo";
 import Whisper from "./components/Whisper";
 
@@ -45,7 +46,13 @@ class App extends Component {
       );
       let cities = await store.put("cities", { name: data.name, id: data.id });
 
-      this.setState(prev => ({ ...prev, data, cities, error: false }));
+      this.setState(prev => ({
+        ...prev,
+        data,
+        cities,
+        selected: id || data.id,
+        error: false
+      }));
     } catch (err) {
       this.setState(prev => ({ ...prev, error: true }));
     } finally {
@@ -82,18 +89,21 @@ class App extends Component {
               type="error"
               text="Oops, seems like something went wrong ... Please try again!"
             />
-            <CityList
-              cities={this.state.cities}
-              onCityClick={id => () => this.getWeatherInfo({ id })}
-            />
-            <Input
-              label="Please type a city"
-              placeholder="Ex: Singapore"
-              value={this.state.input.value}
-              onInputChange={this.handleInputChange}
-              onInputKeyDowm={this.handleInputKeyDown}
-            />
-            <WeatherInfo data={data} />
+            <Main>
+              <CityList
+                cities={this.state.cities}
+                selected={this.state.selected}
+                onCityClick={id => () => this.getWeatherInfo({ id })}
+              />
+              <Input
+                label="Please type a city"
+                placeholder="Ex: Singapore"
+                value={this.state.input.value}
+                onInputChange={this.handleInputChange}
+                onInputKeyDowm={this.handleInputKeyDown}
+              />
+              <WeatherInfo data={data} />
+            </Main>
           </div>
         )}
       </div>
