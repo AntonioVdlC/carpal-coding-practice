@@ -1,5 +1,8 @@
 .cities {
-  padding: 24px;
+  padding: 6px;
+  margin: 6px;
+  border: 1px solid lightgrey;
+  border-radius: 6px;
 }
 
 .cities-list {
@@ -12,6 +15,9 @@
 
 .cities-list-element {
   padding: 6px;
+}
+.cities-list-element:hover {
+  cursor: pointer;
 }
 .cities-list-element.selected {
   background-color: black;
